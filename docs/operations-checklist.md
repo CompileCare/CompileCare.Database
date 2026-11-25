@@ -28,7 +28,9 @@ Use this checklist when provisioning an environment or preparing for production 
 - [ ] Capacity, storage growth and connection pressure monitored.
 - [ ] Long-running transactions, locks and slow queries reviewed.
 - [ ] Access and credential rotation reviewed.
-- [ ] Restore test performed at the policy cadence.
+- [ ] Provider-neutral logical backup archive, checksum and manifest are validated.
+- [ ] Restore into a new isolated database passes the Docker verification; evidence is retained.
+- [ ] Provider-native backup/PITR, encryption/key ownership, retention, RPO/RTO and restore-test cadence are defined before production activation.
 - [ ] Operational changes are ticketed/reviewed and audited.
 - [ ] Any privileged access is time-bound and logged.
 
