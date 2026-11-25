@@ -19,7 +19,6 @@ services:
     working_dir: /workspace
     volumes:
       - ./:/workspace:ro
-      - backup-artifacts:/tmp/compilecare-backup-restore-test
     environment:
       PGHOST: postgres
       PGPORT: "5432"
@@ -27,6 +26,3 @@ services:
       PGPASSWORD: postgres
       PGDATABASE: postgres
     entrypoint: ["/bin/bash", "/workspace/tests/backup-restore/verify.sh"]
-
-volumes:
-  backup-artifacts:
