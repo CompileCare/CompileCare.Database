@@ -13,9 +13,21 @@ fi
 
 command -v pg_dump >/dev/null
 command -v pg_restore >/dev/null
-command -v sha256sum >/dev/null
 command -v base64 >/dev/null
 command -v date >/dev/null
+command -v awk >/dev/null
+if ! command -v sha256sum >/dev/null && ! command -v shasum >/dev/null; then
+  echo "A SHA-256 utility (sha256sum or shasum) is required." >&2
+  exit 2
+fi
+
+sha256_file() {
+  if command -v sha256sum >/dev/null; then
+    sha256sum "$1" | awk '{print $1}'
+  else
+    shasum -a 256 "$1" | awk '{print $1}'
+  fi
+}
 
 output_input=$1
 output_name=$(basename -- "$output_input")
@@ -64,7 +76,7 @@ if [[ ! -s "$temporary_archive" ]]; then
 fi
 
 pg_restore --list "$temporary_archive" >/dev/null
-archive_checksum=$(sha256sum "$temporary_archive" | awk '{print $1}')
+archive_checksum=$(sha256_file "$temporary_archive")
 source_database_base64=$(printf '%s' "$PGDATABASE" | base64 | tr -d '\n')
 created_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 dump_version=$(pg_dump --version)
