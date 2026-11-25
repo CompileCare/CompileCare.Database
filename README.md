@@ -29,4 +29,4 @@ CompileCare currently uses PostgreSQL with Npgsql and EF Core 10. The API does *
 
 ## Status
 
-This repository is establishing its operational foundation. It does not yet contain production deployment scripts or backup automation. Those will be added as separately reviewed milestones and validated against the actual deployment platform.
+This repository contains provider-neutral PostgreSQL logical backup/restore helpers and an isolated Docker verification workflow. These helpers are not production backup scheduling or platform-native point-in-time recovery. Production backup automation, retention, RPO/RTO and hosting-platform procedures remain separate release-readiness decisions.
