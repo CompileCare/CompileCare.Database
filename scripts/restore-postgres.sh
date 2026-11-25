@@ -18,8 +18,28 @@ fi
 command -v pg_restore >/dev/null
 command -v psql >/dev/null
 command -v createdb >/dev/null
-command -v sha256sum >/dev/null
 command -v base64 >/dev/null
+command -v awk >/dev/null
+if ! command -v sha256sum >/dev/null && ! command -v shasum >/dev/null; then
+  echo "A SHA-256 utility (sha256sum or shasum) is required." >&2
+  exit 2
+fi
+
+sha256_file() {
+  if command -v sha256sum >/dev/null; then
+    sha256sum "$1" | awk '{print $1}'
+  else
+    shasum -a 256 "$1" | awk '{print $1}'
+  fi
+}
+
+base64_decode() {
+  if base64 --decode </dev/null >/dev/null 2>&1; then
+    base64 --decode
+  else
+    base64 -D
+  fi
+}
 
 archive_directory=$(cd -- "$(dirname -- "$archive_input")" && pwd)
 archive_name=$(basename -- "$archive_input")
@@ -41,14 +61,24 @@ if [[ -z "$source_database_base64" ]]; then
   echo "Backup manifest does not identify its source database." >&2
   exit 1
 fi
-source_database=$(printf '%s' "$source_database_base64" | base64 --decode)
+source_database=$(printf '%s' "$source_database_base64" | base64_decode)
+if [[ -z "$source_database" ]]; then
+  echo "Backup manifest source database could not be decoded." >&2
+  exit 1
+fi
 
 if [[ "$source_database" == "$target_database" ]]; then
   echo "Refusing to restore a database into itself; choose a new target database." >&2
   exit 1
 fi
 
-if ! (cd -- "$archive_directory" && sha256sum --check --strict --status "$archive_name.sha256"); then
+expected_checksum=$(awk 'NR == 1 { print $1; exit }' "$checksum_file")
+if [[ ! "$expected_checksum" =~ ^[[:xdigit:]]{64}$ ]]; then
+  echo "Backup checksum sidecar is malformed; refusing restore." >&2
+  exit 1
+fi
+actual_checksum=$(sha256_file "$archive_path")
+if [[ "$actual_checksum" != "$expected_checksum" ]]; then
   echo "Backup checksum validation failed; refusing restore." >&2
   exit 1
 fi
