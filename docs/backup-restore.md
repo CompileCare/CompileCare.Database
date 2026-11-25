@@ -49,7 +49,7 @@ PGHOST=db.example.internal PGPORT=5432 PGUSER=compilecare_backup PGDATABASE=comp
   bash scripts/backup-postgres.sh /secure-backups/compilecare.dump
 ```
 
-The helper refuses to overwrite existing output. It creates the archive plus `.sha256` and `.manifest` sidecars with restrictive file permissions. It validates the archive with `pg_restore --list` before publishing the files. The manifest contains the source database name (base64 encoded), UTC creation time and `pg_dump` version; it does not contain credentials.
+The helper refuses to overwrite existing output. It supports SHA-256 through `sha256sum` (GNU/Linux) or `shasum -a 256` (macOS); restore also supports the corresponding GNU and BSD base64 decode options. It creates the archive plus `.sha256` and `.manifest` sidecars with restrictive file permissions. It validates the archive with `pg_restore --list` before publishing the files. The manifest contains the source database name (base64 encoded), UTC creation time and `pg_dump` version; it does not contain credentials.
 
 Restore into a **new, isolated database**:
 
