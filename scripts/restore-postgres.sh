@@ -85,9 +85,12 @@ fi
 
 pg_restore --list "$archive_path" >/dev/null
 
-database_exists=$(psql -X -qAt -v ON_ERROR_STOP=1 -v target="$target_database" \
+# The target name was restricted above to a safe unquoted identifier, so it can
+# be embedded directly in the SQL passed through psql -c. psql variable expansion
+# is not performed for SQL supplied via --command.
+database_exists=$(psql -X -qAt -v ON_ERROR_STOP=1 \
   --dbname=postgres \
-  --command="SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = :'target');")
+  --command="SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = '$target_database');")
 
 if [[ "$database_exists" == "t" ]]; then
   echo "Target database already exists; refusing to overwrite it." >&2
