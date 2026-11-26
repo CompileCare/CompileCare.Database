@@ -70,3 +70,8 @@ The restore helper verifies the checksum and archive, rejects a target that is t
 - Do not treat a passing logical restore test as evidence that production recovery controls are complete. Define the provider-native backup/PITR mechanism, encryption/key ownership, retention, RPO, RTO, restore cadence and accountable operator before production activation.
 
 The repository's `docker-compose.backup-test.yml` and `.github/workflows/backup-restore.yml` execute the backup, restore, checksum and overwrite-guard tests against an isolated PostgreSQL container.
+
+
+## Scheduled synthetic regression verification
+
+The `PostgreSQL Backup Restore Verification` GitHub Actions workflow runs weekly at 03:17 UTC each Monday, as well as for relevant pull requests, pushes to `main` and manual dispatch. It creates a disposable PostgreSQL 16 container and uses only synthetic probe rows to verify logical backup, checksum/manifest integrity, restore into a new database, and overwrite/corruption guards. The run is intended to catch regressions in the repository helper scripts. It does **not** connect to a production database, run a provider-managed physical backup/PITR operation, prove off-site storage, or count as a production restore drill. Production backup monitoring and isolated provider-native recovery exercises remain a separate operational responsibility.
