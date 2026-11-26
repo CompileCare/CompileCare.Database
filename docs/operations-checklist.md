@@ -32,6 +32,7 @@ Use this checklist when provisioning an environment or preparing for production 
 - [ ] Restore into a new isolated database passes the Docker verification; evidence is retained.
 - [ ] Weekly synthetic logical backup/restore CI run is green; this is regression coverage only and does not replace provider-native production backup/PITR monitoring or restore drills.
 - [ ] Provider-native backup/PITR, encryption/key ownership, retention, RPO/RTO and restore-test cadence are defined before production activation.
+- [ ] A provider-native isolated restore drill is completed and recorded using [the recovery plan and drill template](production-recovery-drill-template.md).
 - [ ] Operational changes are ticketed/reviewed and audited.
 - [ ] Any privileged access is time-bound and logged.
 
