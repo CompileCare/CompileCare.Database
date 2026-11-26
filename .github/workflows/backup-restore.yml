@@ -1,0 +1,44 @@
+name: PostgreSQL Backup Restore Verification
+
+on:
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "tests/backup-restore/**"
+      - "docker-compose.backup-test.yml"
+      - ".github/workflows/backup-restore.yml"
+      - "docs/backup-restore.md"
+      - "README.md"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup-restore-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docker-backup-restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate shell syntax
+        run: |
+          bash -n scripts/backup-postgres.sh
+          bash -n scripts/restore-postgres.sh
+          bash -n tests/backup-restore/verify.sh
+      - name: Run PostgreSQL backup and restore verification in Docker
+        run: |
+          docker compose -f docker-compose.backup-test.yml up \
+            --abort-on-container-exit \
+            --exit-code-from verify
+      - name: Capture container logs on failure
+        if: failure()
+        run: docker compose -f docker-compose.backup-test.yml logs --no-color
+      - name: Stop containers and remove test volumes
+        if: always()
+        run: docker compose -f docker-compose.backup-test.yml down --volumes --remove-orphans
