@@ -15,6 +15,7 @@ CompileCare currently uses PostgreSQL with Npgsql and EF Core 10. The API does *
 - [Database architecture and ownership](docs/architecture.md)
 - [Migration and release runbook](docs/migrations-and-release.md)
 - [Backup and restore runbook](docs/backup-restore.md)
+- [Production recovery plan and drill record](docs/production-recovery-drill-template.md) — provider-selection-neutral approval and evidence template for RPO/RTO, backup/PITR, key management and isolated restore drills.
 - [Operations and environment checklist](docs/operations-checklist.md)
 
 ## Principles
