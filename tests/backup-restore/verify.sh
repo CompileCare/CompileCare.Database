@@ -29,6 +29,25 @@ SQL
 
 PGDATABASE="$source_database" bash "$repository_root/scripts/backup-postgres.sh" "$archive"
 
+actual_checksum=$(sha256sum "$archive" | awk '{print $1}')
+expected_checksum=$(awk 'NR == 1 { print $1; exit }' "$archive.sha256")
+if [[ "$actual_checksum" != "$expected_checksum" ]]; then
+  echo "Backup checksum sidecar does not match the archive." >&2
+  exit 1
+fi
+for sidecar in "$archive" "$archive.sha256" "$archive.manifest"; do
+  mode=$(stat -c '%a' "$sidecar")
+  if [[ "$mode" != "600" ]]; then
+    echo "Expected restrictive mode 600 for $sidecar; received $mode." >&2
+    exit 1
+  fi
+done
+manifest_source=$(awk -F= '$1 == "source_database_base64" { print substr($0, index($0, "=") + 1); exit }' "$archive.manifest" | base64 --decode)
+if [[ "$manifest_source" != "$source_database" ]] || ! grep -qx 'format=custom' "$archive.manifest"; then
+  echo "Backup manifest metadata is invalid." >&2
+  exit 1
+fi
+
 if PGDATABASE="$source_database" bash "$repository_root/scripts/backup-postgres.sh" "$archive" >/dev/null 2>&1; then
   echo "Backup helper unexpectedly overwrote an existing archive." >&2
   exit 1
