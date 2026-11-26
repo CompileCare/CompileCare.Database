@@ -8,10 +8,14 @@ on:
       - "docker-compose.backup-test.yml"
       - ".github/workflows/backup-restore.yml"
       - "docs/backup-restore.md"
+      - "docs/operations-checklist.md"
       - "README.md"
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Weekly synthetic logical backup/restore regression; this does not access production data.
+    - cron: '17 3 * * 1'
 
 permissions:
   contents: read
