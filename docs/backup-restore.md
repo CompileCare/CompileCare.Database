@@ -12,6 +12,8 @@
 - Point-in-time recovery (PITR) availability and retention
 - Restore-test frequency and accountable owner
 
+Use the [Production PostgreSQL Recovery Plan and Drill Record](production-recovery-drill-template.md) to capture approved values, provider configuration references, drill evidence, owners and activation sign-off. It is intentionally provider-neutral until hosting is selected; do not fill values by assumption.
+
 ## Backup validation
 
 A backup is not verified merely because the backup job reports success. Validation must include:
