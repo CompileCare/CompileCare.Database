@@ -1,6 +1,8 @@
-# CompileCare.Database
+# HeapCare Database Operations
 
-Database deployment, operational tooling, environment setup and database lifecycle documentation for CompileCare.
+> **Brand migration in progress:** HeapCare is the product brand. Repository names, .NET namespaces, package IDs, database identifiers, OIDC realm/client IDs, and deployment identifiers remain unchanged until their coordinated migration is implemented and validated. Do not infer that technical identifiers have already changed.
+
+Database deployment, operational tooling, environment setup and database lifecycle documentation for HeapCare.
 
 ## Ownership boundaries
 
