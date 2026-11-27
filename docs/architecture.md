@@ -2,7 +2,7 @@
 
 ## Current technology
 
-The CompileCare API foundation uses PostgreSQL, Npgsql and EF Core 10. The API Infrastructure project contains the persistence implementation and the migration history.
+The HeapCare API foundation uses PostgreSQL, Npgsql and EF Core 10. The API Infrastructure project contains the persistence implementation and the migration history.
 
 ## Source of truth
 
@@ -11,8 +11,8 @@ The CompileCare API foundation uses PostgreSQL, Npgsql and EF Core 10. The API I
 | Entities and persistence model | API / Infrastructure | Application source |
 | EF Core migrations and snapshot | API / Infrastructure | Committed migration files |
 | Generated migration SQL | Release process | Generated from migrations for a release |
-| Database provisioning and environment guidance | CompileCare.Database | This repository |
-| Operational scripts | CompileCare.Database | Reviewed, versioned scripts |
+| Database provisioning and environment guidance | HeapCare.Database | This repository |
+| Operational scripts | HeapCare.Database | Reviewed, versioned scripts |
 | Runtime secrets and credentials | Environment/secret manager | Never Git |
 
 Avoid maintaining a second schema definition in this repository. If a SQL object cannot be represented cleanly in EF migrations, document its ownership and deployment ordering, and include a reversible or recovery strategy where possible.
