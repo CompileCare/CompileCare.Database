@@ -1,16 +1,16 @@
 # HeapCare Database Operations
 
-> **Brand migration in progress:** HeapCare is the product brand. Repository names, .NET namespaces, package IDs, database identifiers, OIDC realm/client IDs, and deployment identifiers remain unchanged until their coordinated migration is implemented and validated. Do not infer that technical identifiers have already changed.
+> **HeapCare migration status:** HeapCare is the product-facing brand. This repository's documentation and operational references are being migrated. Existing PostgreSQL database names, roles, connection-string keys, backup paths and historical restore artifacts remain compatibility contracts; they are not renamed by this documentation change.
 
 Database deployment, operational tooling, environment setup and database lifecycle documentation for HeapCare.
 
 ## Ownership boundaries
 
-- **CompileCare.Api / Infrastructure** owns EF Core entities, DbContext, model configuration, migrations and the migration model snapshot.
-- **CompileCare.Database** owns database operations documentation, environment provisioning guidance, reviewed deployment artifacts, backup/restore procedures, operational scripts and (when needed) non-application database objects that have a clearly documented owner.
+- **HeapCare.Api / Infrastructure** owns EF Core entities, DbContext, model configuration, migrations and the migration model snapshot.
+- **HeapCare.Database** owns database operations documentation, environment provisioning guidance, reviewed deployment artifacts, backup/restore procedures, operational scripts and (when needed) non-application database objects that have a clearly documented owner.
 - Application schema changes must not be duplicated as hand-maintained SQL in this repository. Generated migration scripts are produced from the API's committed EF Core migrations.
 
-CompileCare currently uses PostgreSQL with Npgsql and EF Core 10. The API does **not** apply migrations automatically at startup.
+HeapCare currently uses PostgreSQL with Npgsql and EF Core 10. The API does **not** apply migrations automatically at startup.
 
 ## Start here
 
