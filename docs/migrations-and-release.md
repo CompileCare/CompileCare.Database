@@ -12,7 +12,7 @@ Run from a checkout of HeapCare.Api with the .NET 10 SDK and the required packag
 dotnet ef migrations script --idempotent \
   --project src/HeapCare.Infrastructure \
   --startup-project src/HeapCare.Api \
-  --output artifacts/compilecare-migrations.sql
+  --output artifacts/heapcare-migrations.sql
 ```
 
 Review the generated script against the migration changes and the target database version. The script must be generated from the exact commit/release being deployed.
@@ -56,6 +56,6 @@ Document expected data loss and downtime for the selected recovery method. A mig
 
 HeapCare.Api now runs a PostgreSQL 16 migration rehearsal for pull requests that change the API, EF Infrastructure or migration workflow. See the [migration-rehearsal workflow](https://github.com/HeapCare/HeapCare.Api/blob/main/.github/workflows/migration-rehearsal.yml) and [implementation PR #73](https://github.com/HeapCare/HeapCare.Api/pull/73).
 
-The job creates disposable `compilecare_upgrade` and `compilecare_fresh` databases. It checks out the PR base revision, applies its committed migrations to the upgrade database, builds the PR revision, generates its idempotent migration script, and applies that script to both databases. It reapplies the script to each database to verify idempotency, then compares the exact ordered EF migration IDs recorded in both `__EFMigrationsHistory` tables. The job uses synthetic/empty databases only and never connects to a shared or production environment.
+The job creates disposable `heapcare_upgrade` and `heapcare_fresh` databases. It checks out the PR base revision, applies its committed migrations to the upgrade database, builds the PR revision, generates its idempotent migration script, and applies that script to both databases. It reapplies the script to each database to verify idempotency, then compares the exact ordered EF migration IDs recorded in both `__EFMigrationsHistory` tables. The job uses synthetic/empty databases only and never connects to a shared or production environment.
 
 A passing rehearsal demonstrates that the committed migration chain can upgrade the current base schema and initialize a fresh schema under PostgreSQL 16. It does **not** validate production-volume lock behavior, representative-data backfills, provider-specific physical backups/PITR, RPO/RTO, production secrets, or approval to deploy. The release sequence above and an isolated representative-data rehearsal remain mandatory for production changes.
