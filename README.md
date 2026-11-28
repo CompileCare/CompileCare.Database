@@ -1,6 +1,6 @@
 # HeapCare Database Operations
 
-> **HeapCare migration status:** HeapCare is the product-facing brand. This repository's documentation and operational references are being migrated. Existing PostgreSQL database names, roles, connection-string keys, backup paths and historical restore artifacts remain compatibility contracts; they are not renamed by this documentation change.
+> **HeapCare identity:** Product-facing documentation and operational guidance in this repository use HeapCare. Existing PostgreSQL database and role names, connection-string compatibility keys, backup paths, and historical restore artifacts remain compatibility references; this repository does not rename persisted resources.
 
 Database deployment, operational tooling, environment setup and database lifecycle documentation for HeapCare.
 
